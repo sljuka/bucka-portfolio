@@ -8,9 +8,7 @@ class Footer extends Component {
   render() {
     return (
       <footer>
-        <p>
-          <FormattedHTMLMessage message={msg('app.madeByHtml')} />
-        </p>
+        
       </footer>
     );
   }

@@ -9,7 +9,12 @@ export function setMenuStyle(screenWidth) {
   dispatch(setMenuStyle, screenWidth)
 }
 
+export function open(val) {
+  dispatch(open, val)
+}
+
 setToString('demos', {
   toggle,
-  setMenuStyle
+  setMenuStyle,
+  open
 });

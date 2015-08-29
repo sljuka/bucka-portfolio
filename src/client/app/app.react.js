@@ -40,7 +40,7 @@ class App extends Component {
 
   render() {
     return (
-      <div className="page">
+      <div className="page container">
         <Header menu={this.state.menu} />
         <RouteHandler {...this.state} />
         <Footer />

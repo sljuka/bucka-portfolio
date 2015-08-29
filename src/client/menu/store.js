@@ -1,4 +1,4 @@
-import {toggle, setMenuStyle} from './actions';
+import {toggle, setMenuStyle, open} from './actions';
 import {menuCursor} from '../state';
 import {register} from '../dispatcher';
 
@@ -22,6 +22,11 @@ export const dispatchToken = register(({action, data}) => {
       if(!isCompact)
         menuCursor(menu => menu.set('expanded', false))
       menuCursor(menu => menu.set('compact', isCompact))
+      break;
+
+    case open:
+      menuCursor(menu => menu.set('open', data))
+      menuCursor(menu => menu.set('initial', false))
       break;
 
   }

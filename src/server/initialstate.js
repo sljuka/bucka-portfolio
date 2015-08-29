@@ -6,7 +6,9 @@ export default {
   // Each key represents one app feature/store.
   menu: {
     expanded: false,
-    compact: false
+    compact: false,
+    open: false,
+    initial: true
   },
   auth: {
     data: null,

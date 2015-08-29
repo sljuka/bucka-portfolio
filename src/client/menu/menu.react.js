@@ -44,7 +44,7 @@ export default class Menu extends Component {
     return (
       <nav className="main-nav clearfix">
         {compact &&
-          <a href="#" onClick={this.toggleMenu}>Toggle</a>
+          <a href="#" className="toggle-menu" onClick={this.toggleMenu}></a>
         }
         {displayMenuList &&
           menuList
