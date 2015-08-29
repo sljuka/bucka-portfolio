@@ -64,7 +64,9 @@ export default class Home extends Component {
 
     const clk = this.props.menu.get('open')
     const init = this.props.menu.get('initial')
-    const items = require('../../test/fixtures/processes.json')
+    const processes = this.props.processes.toJS()
+    const processKeys = Object.keys(processes)
+    const firstProcess = processes[processKeys[0]]
 
     return (
       <DocumentTitle title={msg('home.title')}>
@@ -80,17 +82,16 @@ export default class Home extends Component {
                 {tween => {
                   return (
                     <ul ref='list' style={this.startStyle()}>
-                    {items[0].instances.map(item => {
-                      const open = items[0].opened
+                    {firstProcess.instances.map(pcs => {
+                      const open = firstProcess.opened
                       let pct = tween.val.val
-                      let st = null
-                      st = open ? (50 + 150 * Math.round(pct)/100) : (50 - 50 * Math.round(pct)/100)
+                      let st = open ? (50 + 150 * Math.round(pct)/100) : (50 - 50 * Math.round(pct)/100)
                       if(init)
                         st = 50
 
                       return (
-                        <li style={(clk && open) ? this.innerOpen(st) : this.innerClose(st)} key={item.id}>
-                          {`${item.name} [${item.version}]`}
+                        <li style={(clk && open) ? this.innerOpen(st) : this.innerClose(st)} key={pcs.id}>
+                          {`${pcs.name} [${pcs.version}]`}
                         </li>
                       )
                     })}

@@ -1,6 +1,7 @@
 import config from '../config';
 import Promise from 'bluebird';
 import Immutable from 'immutable';
+import {get} from '../../lib/api'
 
 // Example how initialState, which is the same for all users, is enriched with
 // user state. With state-less Flux, we don't need instances.
@@ -19,7 +20,7 @@ export default function userState() {
 function loadUserData(req) {
   const dataSources = [
     acceptLanguages(req),
-    loadTodos()
+    loadProcesses()
   ];
 
   return Promise.settle(dataSources).then(receivedData =>
@@ -40,18 +41,10 @@ function acceptLanguages(req) {
 }
 
 // Simulate async action.
-function loadTodos() {
+function loadProcesses() {
   return new Promise((resolve, reject) => {
-    setTimeout(() => {
-      const todos = {
-        todos: {
-          list: [
-            {id: 2, title: 'relax'}
-          ]
-        }
-      };
-
-      resolve(todos);
-    }, 20);
-  });
+    get('http://localhost:8000/api/v1/processes')
+      .then(response => resolve(response.json()))
+      .catch(ex => console.error(`GET is not working ${ex}`))
+  })
 }

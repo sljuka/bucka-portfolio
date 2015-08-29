@@ -1,44 +1,46 @@
-[
-  {
-    "opened": null,
-    "name": "make_breakfast",
-    "instances": [
-      {
-        "id": 1,
-        "name": "make_breakfast",
-        "version": "0.0.1"
-      },
-      {
-        "id": 2,
-        "name": "make_breakfast",
-        "version": "0.0.1"
-      },
-      {
-        "id": 3,
-        "name": "make_breakfast",
-        "version": "0.0.2"
-      }
-    ]
-  },
-  {
-    "opened": null,
-    "name": "make_dinner",
-    "instances": [
-      {
-        "id": 1,
-        "name": "make_dinner",
-        "version": "0.0.1"
-      },
-      {
-        "id": 2,
-        "name": "make_dinner",
-        "version": "0.0.1"
-      },
-      {
-        "id": 3,
-        "name": "make_dinner",
-        "version": "0.0.2"
-      }
-    ]
+{
+  "processes": {
+    "make_breakfast": {
+      "opened": null,
+      "name": "make_breakfast",
+      "instances": [
+        {
+          "id": 1,
+          "name": "make_breakfast",
+          "version": "0.0.1"
+        },
+        {
+          "id": 2,
+          "name": "make_breakfast",
+          "version": "0.0.1"
+        },
+        {
+          "id": 3,
+          "name": "make_breakfast",
+          "version": "0.0.2"
+        }
+      ]
+    },
+    "make_dinner": {
+      "opened": null,
+      "name": "make_dinner",
+      "instances": [
+        {
+          "id": 1,
+          "name": "make_dinner",
+          "version": "0.0.1"
+        },
+        {
+          "id": 2,
+          "name": "make_dinner",
+          "version": "0.0.1"
+        },
+        {
+          "id": 3,
+          "name": "make_dinner",
+          "version": "0.0.2"
+        }
+      ]
+    }
   }
-]
+}

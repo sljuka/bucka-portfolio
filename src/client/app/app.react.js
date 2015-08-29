@@ -13,6 +13,7 @@ import '../examples/store';
 import '../todos/store';
 import '../users/store';
 import '../menu/store';
+import '../processes/store';
 
 class App extends Component {
 
