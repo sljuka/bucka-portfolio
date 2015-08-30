@@ -2,6 +2,7 @@ import Component from '../components/component.react'
 import React from 'react'
 import {Spring} from 'react-motion'
 import {open, close} from './actions'
+import config from './config'
 
 export default class ProcessBubble extends Component {
 
@@ -38,7 +39,9 @@ export default class ProcessBubble extends Component {
       <ul ref='list' style={this.listStyle()}>
         {pcss.instances.map(instance => {
           const open = openedInstance && openedInstance.id === instance.id
-          const height = open ? (50 + 150 * Math.round(frameNo)/100) : (50 - 50 * Math.round(frameNo)/100)
+          const height = open ?
+            (config.bubbleItemHeight + (config.bubbleHeight - config.bubbleItemHeight) * Math.round(frameNo)/100) - 3 : 
+            (config.bubbleItemHeight - config.bubbleItemHeight * Math.round(frameNo)/100)
 
           return (
             <li onClick={() => this.handleClick(pcss.name, instance.id)}
@@ -56,14 +59,15 @@ export default class ProcessBubble extends Component {
     return {
       width: '100%',
       borderBottom: '1px solid',
-      height: 50,
+      height: config.bubbleItemHeight,
       overflow: 'hidden'
     }
   }
 
   openStyle(val) {
     let bbottom = '1px solid'
-    if(val >= 197 || val <= 1)
+    const borderMargin = config.bubbleHeight - 4
+    if(val >= borderMargin || val <= 1)
       bbottom = null
 
     return {
@@ -75,7 +79,8 @@ export default class ProcessBubble extends Component {
 
   closeStyle(val) {
     let bbottom = '1px solid'
-    if(val >= 199 || val <= 1)
+    const borderMargin = config.bubbleHeight - 4
+    if(val >= borderMargin || val <= 1)
       bbottom = null
 
     return {
@@ -89,7 +94,7 @@ export default class ProcessBubble extends Component {
     return {
       border: '1px solid',
       padding: 0,
-      height: 203,
+      height: config.bubbleHeight,
       overflowY: 'auto'
     }
   }
