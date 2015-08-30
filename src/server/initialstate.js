@@ -10,6 +10,7 @@ export default {
     open: false,
     initial: true
   },
+  processes: {},
   auth: {
     data: null,
     form: null
