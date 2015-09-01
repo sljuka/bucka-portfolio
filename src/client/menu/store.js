@@ -1,6 +1,7 @@
-import {toggle, setMenuStyle, open} from './actions';
+import {toggle, setMenuStyle, open, setBlocks} from './actions';
 import {menuCursor} from '../state';
 import {register} from '../dispatcher';
+import Immutable from 'immutable'
 
 export const dispatchToken = register(({action, data}) => {
 
@@ -27,6 +28,10 @@ export const dispatchToken = register(({action, data}) => {
     case open:
       menuCursor(menu => menu.set('open', data))
       menuCursor(menu => menu.set('initial', false))
+      break;
+
+    case setBlocks:
+      menuCursor(menu => menu.set('blocks', Immutable.fromJS(data)))
       break;
 
   }

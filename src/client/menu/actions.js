@@ -13,8 +13,13 @@ export function open(val) {
   dispatch(open, val)
 }
 
-setToString('demos', {
+export function setBlocks(values) {
+  dispatch(setBlocks, values)
+}
+
+setToString('menu', {
   toggle,
   setMenuStyle,
-  open
+  open,
+  setBlocks
 });

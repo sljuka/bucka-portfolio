@@ -8,7 +8,12 @@ export default {
     expanded: false,
     compact: false,
     open: false,
-    initial: true
+    initial: true,
+    blocks: {
+      a: 'I am a',
+      b: 'I am b',
+      c: 'I am c'
+    }
   },
   processes: {},
   auth: {
