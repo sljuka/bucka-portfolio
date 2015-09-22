@@ -2,7 +2,7 @@ import Component from '../components/component.react';
 import DocumentTitle from 'react-document-title';
 import React from 'react';
 import {msg} from '../intl/store';
-import ProcessList from '../processes/processlist.react'
+import ProcessList from '../processes/processlist.react';
 
 export default class Home extends Component {
 

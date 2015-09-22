@@ -1,7 +1,7 @@
 import App from './app/app.react';
-import Examples from './pages/examples.react';
+import Projects from './pages/projects.react';
 import Home from './pages/home.react';
-import Login from './pages/login.react';
+import Test from './pages/test.react';
 import Me from './pages/me.react';
 import NotFound from './pages/notfound.react';
 import React from 'react';
@@ -12,7 +12,7 @@ export default (
   <Route handler={App} path="/">
     <DefaultRoute handler={Home} name="home" />
     <NotFoundRoute handler={NotFound} name="not-found" />
-    <Route handler={Examples} name="projects" />
-    <Route handler={Login} name="contact" />
+    <Route handler={Projects} name="projects" />
+    <Route handler={Test} name="test" />
   </Route>
 );

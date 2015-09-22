@@ -22,8 +22,8 @@ export default class ProcessBubble extends Component {
       <div>
         <button onClick={() => this.handleCloseClick(pcss.name)}>Close</button>
         <Spring
-          defaultValue={opened ? {val: {val: 100, config: [300, 50]}} : {val: {val: 1, config: [300, 50]}}} 
-          endValue={opened ? {val: {val: 100, config: [300, 50]}} : {val: {val: 1, config: [300, 50]}}}>
+          defaultValue={opened ? {val: {val: 100, config: [500, 50]}} : {val: {val: 1, config: [500, 50]}}} 
+          endValue={opened ? {val: {val: 100, config: [500, 50]}} : {val: {val: 1, config: [500, 50]}}}>
           {tween => this.renderAnimatedProcessList(tween.val.val)}
         </Spring>
       </div>

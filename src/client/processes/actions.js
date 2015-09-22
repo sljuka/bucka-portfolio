@@ -9,7 +9,22 @@ export function close(processName) {
   dispatch(close, {processName})
 }
 
+export function grabBubble(key, [pressX, pressY], {pageX, pageY}) {
+
+}
+
+export function moveBubble() {
+
+}
+
+export function letGoBubble() {
+
+}
+
 setToString('processes', {
   open,
-  close
+  close,
+  grabBubble,
+  moveBubble,
+  letGoBubble
 });

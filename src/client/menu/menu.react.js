@@ -31,7 +31,7 @@ export default class Menu extends Component {
       <ul className="clearfix">
         <li><Link to="home">{msg('header.home')}</Link></li>
         <li><Link to="projects">{msg('header.projects')}</Link></li>
-        <li><Link to="contact">{msg('header.contact')}</Link></li>
+        <li><Link to="test">{msg('header.contact')}</Link></li>
         <li><a href="#">Design</a></li>
         <li><a href="#">Web 2.0</a></li>
         <li><a href="#">Tools</a></li> 

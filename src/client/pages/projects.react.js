@@ -1,14 +1,9 @@
-import * as actions from '../examples/actions';
 import Component from '../components/component.react';
-import DocumentTitle from 'react-document-title';
-import Editable from '../components/editable.react';
 import React from 'react';
-import immutable from 'immutable';
-import {msg} from '../intl/store';
+import {setBlocks} from '../menu/actions';
 import {TransitionSpring} from 'react-motion';
-import {setBlocks} from '../menu/actions'
 
-class Examples extends Component {
+export default class Projects extends Component {
 
   getEndValue() {
     let blocks = this.props.menu.get('blocks').toJS();
@@ -17,7 +12,7 @@ class Examples extends Component {
       configs[key] = {
         height: {val: 50, config: [180, 12]},
         opacity: {val: 1, config: [180, 12]},
-        text: blocks[key], // interpolate the above 2 fields only
+        text: blocks[key] // interpolate the above 2 fields only
       };
     });
     return configs;
@@ -28,7 +23,7 @@ class Examples extends Component {
     return {
       height: {val: 50},
       opacity: {val: 1},
-      text: blocks[key],
+      text: blocks[key]
     };
   }
 
@@ -37,7 +32,7 @@ class Examples extends Component {
     return {
       height: {val: 0},
       opacity: {val: 0},
-      text: currentValue[key].text,
+      text: currentValue[key].text
     };
   }
 
@@ -58,10 +53,10 @@ class Examples extends Component {
             {Object.keys(currentValue).map(key => {
               let style = {
                 height: currentValue[key].height.val,
-                opacity: currentValue[key].opacity.val,
+                opacity: currentValue[key].opacity.val
               };
               return (
-                <div onClick={this.handleClick.bind(this, key)} key={key} style={style}>
+                <div key={key} onClick={this.handleClick.bind(this, key)} style={style}>
                   {currentValue[key].text}
                 </div>
               );
@@ -73,5 +68,3 @@ class Examples extends Component {
   }
 
 }
-
-export default Examples;

@@ -23,3 +23,4 @@ export const todosCursor = appState.cursor(['todos']);
 export const usersCursor = appState.cursor(['users']);
 export const menuCursor = appState.cursor(['menu']);
 export const processesCursor = appState.cursor(['processes']);
+export const processPanelCursor = appState.cursor(['processPanel']);

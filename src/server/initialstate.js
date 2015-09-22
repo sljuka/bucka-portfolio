@@ -16,6 +16,26 @@ export default {
     }
   },
   processes: {},
+  processPanel: {
+    pressedKey: null,
+    isPressed: false,
+    delta: [0, 0],
+    mouse: [0, 0],
+    examples: [
+      {
+        key: 1,
+        text: 'first'
+      },
+      {
+        key: 2,
+        text: 'second'
+      },
+      {
+        key: 3,
+        text: 'third'
+      }
+    ]
+  },
   auth: {
     data: null,
     form: null
