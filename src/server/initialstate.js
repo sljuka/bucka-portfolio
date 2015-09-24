@@ -1,6 +1,6 @@
-import messages from '../client/messages';
+import messages from '../client/messages'
 
-const initialLocale = 'en';
+const initialLocale = 'en'
 
 export default {
   // Each key represents one app feature/store.
@@ -23,16 +23,29 @@ export default {
     mouse: [0, 0],
     examples: [
       {
-        key: 1,
-        text: 'first'
+        color:    '#EF767A',
+        key:      0,
+        position: 0
       },
       {
-        key: 2,
-        text: 'second'
+        color:    '#456990',
+        key:      1,
+        position: 1
       },
       {
-        key: 3,
-        text: 'third'
+        color:    '#49BEAA',
+        key:      2,
+        position: 2
+      },
+      {
+        color:    '#49DCB1',
+        key:      3,
+        position: 3
+      },
+      {
+        color:    '#EEB868',
+        key:      4,
+        position: 4
       }
     ]
   },
@@ -69,4 +82,4 @@ export default {
     // User can be authenticated on server, and then viewer must be defined.
     viewer: null
   }
-};
+}
