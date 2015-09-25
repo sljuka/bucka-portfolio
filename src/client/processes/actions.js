@@ -13,12 +13,12 @@ export function startDraggingBubble(data) {
   dispatch(startDraggingBubble, data)
 }
 
-export function moveBubble() {
-
+export function moveBubble(data) {
+  dispatch(moveBubble, data)
 }
 
 export function letGoBubble() {
-
+  dispatch(letGoBubble)
 }
 
 setToString('processes', {

@@ -1,4 +1,4 @@
-import {open, close, startDraggingBubble} from './actions'
+import {open, close, startDraggingBubble, moveBubble, letGoBubble} from './actions'
 import {processesCursor, processPanelCursor} from '../state'
 import {register} from '../dispatcher'
 import '../../lib/polyfill/find'
@@ -31,10 +31,28 @@ export const dispatchToken = register(({action, data}) => {
     case startDraggingBubble:
       processPanelCursor(processPanel => {
         return processPanel
-          .set('pressedKey', data.draggedKey)
-          .set('isPressed', data.isPressed)
+          .set('pressedKey', data.pressedKey)
+          .set('isPressed', true)
           .set('delta', data.delta)
           .set('mouse', data.mouse)
+
+      })
+      break
+
+    case moveBubble:
+      processPanelCursor(processPanel => {
+        return processPanel
+          .set('mouse', data.mouse)
+
+      })
+      break
+
+    case letGoBubble:
+      processPanelCursor(processPanel => {
+        return processPanel
+          .set('isPressed', false)
+          .set('pressedKey', null)
+          .set('delta', [0, 0])
 
       })
       break

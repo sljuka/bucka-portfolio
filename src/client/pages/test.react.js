@@ -1,6 +1,6 @@
 import Component from '../components/component.react'
 import React from 'react'
-import {startDraggingBubble} from '../processes/actions'
+import {startDraggingBubble, moveBubble, letGoBubble} from '../processes/actions'
 
 class Login extends Component {
 
@@ -10,13 +10,15 @@ class Login extends Component {
   }
 
   handleMouseUp() {
-    // this.setState({isPressed: false, delta: [0, 0]});
+    letGoBubble()
   }
 
   handleMouseMove({pageX, pageY}) {
-    // const {isPressed, pressedKey, delta: [dx, dy]} = this.props.processPanel
-    // if (isPressed)
-      // moveBubble(pressedKey, pageX, pageY)
+    const {isPressed, delta: [dx, dy]} = this.props.processPanel.toJS()
+    if (isPressed)
+      moveBubble({
+        mouse: [pageX - dx, pageY - dy]
+      })
     // const {order, lastPress, isPressed, delta: [dx, dy]} = this.state;
     // if (isPressed) {
     //   const mouse = [pageX - dx, pageY - dy];
@@ -33,9 +35,10 @@ class Login extends Component {
   }
 
   handleMouseDown(key, [pressX, pressY], {pageX, pageY}) {
+    console.log(`page: ${pageX} ${pageY}`)
+    console.log(`press: ${pressX} ${pressY}`)
     startDraggingBubble({
-      draggedKey: key,
-      isPressed: true,
+      pressedKey: key,
       delta: [pageX - pressX, pageY - pressY],
       mouse: [pressX, pressY]
     })
