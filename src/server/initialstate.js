@@ -15,39 +15,13 @@ export default {
       c: 'I am c'
     }
   },
-  processes: {},
   processPanel: {
+    processes: {},
     pressedKey: null,
     isPressed: false,
     delta: [0, 0],
     mouse: [0, 0],
-    examples: [
-      {
-        color:    '#EF767A',
-        key:      0,
-        position: 0
-      },
-      {
-        color:    '#456990',
-        key:      1,
-        position: 1
-      },
-      {
-        color:    '#49BEAA',
-        key:      2,
-        position: 2
-      },
-      {
-        color:    '#49DCB1',
-        key:      3,
-        position: 3
-      },
-      {
-        color:    '#EEB868',
-        key:      4,
-        position: 4
-      }
-    ]
+    examples: [0, 1, 2, 3, 4, 5]
   },
   auth: {
     data: null,

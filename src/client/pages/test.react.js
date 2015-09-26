@@ -1,12 +1,22 @@
 import Component from '../components/component.react'
 import React from 'react'
-import {startDraggingBubble, moveBubble, letGoBubble} from '../processes/actions'
+import {startDraggingBubble, moveBubble, letGoBubble} from '../processPanel/actions'
+import {Spring} from 'react-motion'
+
+const RANGE = [0, 1, 2, 3, 4, 5]
+const COUNT = RANGE.length
+const [WIDTH, HEIGHT, TOP, LEFT] = [300, 200, 0, 0]
+const LAYOUT = [0, 1, 2, 3, 4, 5].map(pos => {
+  const row = Math.floor(pos / 3)
+  const col = pos % 3
+  return [WIDTH * col, HEIGHT * row]
+})
 
 class Login extends Component {
 
   handleTouchMove(e) {
-    // e.preventDefault();
-    // this.handleMouseMove(e.touches[0]);
+    e.preventDefault()
+    this.handleMouseMove(e.touches[0])
   }
 
   handleMouseUp() {
@@ -14,88 +24,94 @@ class Login extends Component {
   }
 
   handleMouseMove({pageX, pageY}) {
-    const {isPressed, delta: [dx, dy]} = this.props.processPanel.toJS()
-    if (isPressed)
+    const {examples, pressedKey, isPressed, delta: [dx, dy]} = this.props.processPanel.toJS()
+    if (isPressed) {
+      const mouse = [pageX - dx, pageY - dy]
+      const col = this._clamp(Math.floor(mouse[0] / WIDTH), 0, 2)
+      const row = this._clamp(Math.floor(mouse[1] / HEIGHT), 0, Math.floor(COUNT / 3))
+      const newIndex = row * 3 + col
+      const newOrder = this._reinsert(examples, examples.indexOf(pressedKey), newIndex)
       moveBubble({
-        mouse: [pageX - dx, pageY - dy]
+        mouse: mouse,
+        examples: newOrder
       })
-    // const {order, lastPress, isPressed, delta: [dx, dy]} = this.state;
-    // if (isPressed) {
-    //   const mouse = [pageX - dx, pageY - dy];
-    //   const col = clamp(Math.floor(mouse[0] / width), 0, 2);
-    //   const row = clamp(Math.floor(mouse[1] / height), 0, Math.floor(count / 3));
-    //   const index = row * 3 + col;
-    //   const newOrder = reinsert(order, order.indexOf(lastPress), index);
-    //   this.setState({mouse: mouse, order: newOrder});
-    // }
+    }
   }
 
   handleTouchStart(key, pressLocation, e) {
     this.handleMouseDown(key, pressLocation, e.touches[0])
   }
 
-  handleMouseDown(key, [pressX, pressY], {pageX, pageY}) {
-    console.log(`page: ${pageX} ${pageY}`)
-    console.log(`press: ${pressX} ${pressY}`)
+  handleMouseDown(key, [pressedX, pressedY], {pageX, pageY}) {
+    const deltaX = pageX - pressedX
+    const deltaY = pageY - pressedY
     startDraggingBubble({
       pressedKey: key,
-      delta: [pageX - pressX, pageY - pressY],
-      mouse: [pressX, pressY]
+      delta: [deltaX, deltaY],
+      mouse: [pressedX, pressedY]
     })
   }
 
   getValues() {
-    const [width, height] = [120, 70, 90]
-    const layout = [0, 1, 2, 3, 4].map(pos => {
-      const row = Math.floor(pos / 3)
-      const col = pos % 3
-      return [width * col, height * row]
-    })
-
     const {examples, isPressed, mouse, pressedKey} = this.props.processPanel.toJS()
-    const positioned = examples.sort((a, b) => a.position >= b.position)
-
+    console.log(examples)
     return {
-      order: positioned.map((el, index) => {
-        if (el.key === pressedKey && isPressed)
-          return {val: mouse, config: [], element: el}
-
-        return {val: layout[index], config: [120, 17], element: el}
+      order: examples.map((_, key) => {
+        if (key === pressedKey && isPressed)
+          return {val: mouse, config: []}
+        const visPos = examples.indexOf(key)
+        return {val: LAYOUT[visPos], config: [120, 17]}
       }),
       scales: {
-        val: [0, 1, 2, 3, 4].map((_, key) => pressedKey === key && isPressed ? 1.2 : 1),
+        val: examples.map((el, key) => (key === pressedKey && isPressed) ? 1.2 : 1),
         config: [180, 10]
       }
     }
   }
 
   render() {
-    const [top, left] = [100, 150]
-    const data = this.getValues()
+    const {examples, pressedKey} = this.props.processPanel.toJS()
     return (
-      <div
-        className='canvas'
-        onMouseMove={this.handleMouseMove.bind(this)}
-        onMouseUp={this.handleMouseUp.bind(this)}
-        onTouchEnd={this.handleMouseUp.bind(this)}
-        onTouchMove={this.handleTouchMove.bind(this)}>
-        {data.order.map(({val: [x, y], config, element}) =>
+      <Spring endValue={this.getValues()}>
+        {({order: currOrder, scales: {val: scales}}) =>
           <div
-            className="example-block"
-            key={element.key}
-            onMouseDown={this.handleMouseDown.bind(null, element.key, [x, y])}
-            onTouchStart={this.handleTouchStart.bind(null, element.key, [x, y])}
-            style={{
-                    backgroundColor: element.color,
-                    transform: `translate3d(${x + left}px, ${y + top}px, 0) scale(1)`,
-                    WebkitTransform: `translate3d(${x + left}px, ${y + top}px, 0) scale(1)`,
-                    zIndex: element.key === 1 ? 99 : 1
-                  }}
-          >example {element.key}
+            className='canvas'
+            onMouseMove={this.handleMouseMove.bind(this)}
+            onMouseUp={this.handleMouseUp.bind(this)}
+            onTouchEnd={this.handleMouseUp.bind(this)}
+            onTouchMove={this.handleTouchMove.bind(this)}>
+            {currOrder.map(({val: [x, y]}, key) =>
+              <div
+                className="example-block"
+                data-key={key}
+                key={key}
+                onMouseDown={this.handleMouseDown.bind(null, key, [x, y])}
+                onTouchStart={this.handleTouchStart.bind(null, key, [x, y])}
+                style={{
+                        backgroundColor: '#EF767A',
+                        transform: `translate3d(${x + LEFT}px, ${y + TOP}px, 0) scale(${scales[key]})`,
+                        WebkitTransform: `translate3d(${x + LEFT}px, ${y + TOP}px, 0) scale(${scales[key]})`,
+                        zIndex: key === pressedKey ? 99 : 1
+                      }}
+              >{key}
+              </div>
+            )}
           </div>
-        )}
-      </div>
+        }
+      </Spring>
     )
+  }
+
+  _reinsert(arr, from, to) {
+    const _arr = arr.slice(0)
+    const val = _arr[from]
+    _arr.splice(from, 1)
+    _arr.splice(to, 0, val)
+    return _arr
+  }
+
+  _clamp(n, min, max) {
+    return Math.max(Math.min(n, max), min)
   }
 
 }

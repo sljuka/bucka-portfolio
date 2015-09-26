@@ -2,6 +2,7 @@ import {open, close, startDraggingBubble, moveBubble, letGoBubble} from './actio
 import {processesCursor, processPanelCursor} from '../state'
 import {register} from '../dispatcher'
 import '../../lib/polyfill/find'
+import Immutable from 'immutable'
 
 export const dispatchToken = register(({action, data}) => {
 
@@ -40,10 +41,11 @@ export const dispatchToken = register(({action, data}) => {
       break
 
     case moveBubble:
+      const {examples, mouse} = data
       processPanelCursor(processPanel => {
         return processPanel
           .set('mouse', data.mouse)
-
+          .set('examples', Immutable.List(data.examples))
       })
       break
 

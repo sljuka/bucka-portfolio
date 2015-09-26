@@ -1,30 +1,30 @@
-import Component from '../components/component.react';
-import React from 'react';
-import {setBlocks} from '../menu/actions';
-import {TransitionSpring} from 'react-motion';
+import Component from '../components/component.react'
+import React from 'react'
+import {setBlocks} from '../menu/actions'
+import {TransitionSpring} from 'react-motion'
 
 export default class Projects extends Component {
 
   getEndValue() {
-    let blocks = this.props.menu.get('blocks').toJS();
-    let configs = {};
+    let blocks = this.props.menu.get('blocks').toJS()
+    let configs = {}
     Object.keys(blocks).forEach(key => {
       configs[key] = {
         height: {val: 50, config: [180, 12]},
         opacity: {val: 1, config: [180, 12]},
         text: blocks[key] // interpolate the above 2 fields only
-      };
-    });
-    return configs;
+      }
+    })
+    return configs
   }
 
   willEnter(key) {
-    let blocks = this.props.menu.get('blocks').toJS();
+    let blocks = this.props.menu.get('blocks').toJS()
     return {
       height: {val: 50},
       opacity: {val: 1},
       text: blocks[key]
-    };
+    }
   }
 
   willLeave(key, value, endValue, currentValue, currentSpeed) {
@@ -33,13 +33,13 @@ export default class Projects extends Component {
       height: {val: 0},
       opacity: {val: 0},
       text: currentValue[key].text
-    };
+    }
   }
 
   handleClick(key) {
-    let {...newBlocks} = this.props.menu.get('blocks').toJS();
-    delete newBlocks[key];
-    setBlocks(newBlocks);
+    let {...newBlocks} = this.props.menu.get('blocks').toJS()
+    delete newBlocks[key]
+    setBlocks(newBlocks)
   }
 
   render() {
@@ -54,17 +54,17 @@ export default class Projects extends Component {
               let style = {
                 height: currentValue[key].height.val,
                 opacity: currentValue[key].opacity.val
-              };
+              }
               return (
                 <div key={key} onClick={this.handleClick.bind(this, key)} style={style}>
                   {currentValue[key].text}
                 </div>
-              );
+              )
             })}
           </div>
         }
       </TransitionSpring>
-    );
+    )
   }
 
 }
