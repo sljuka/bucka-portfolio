@@ -21,7 +21,7 @@ export default {
     isPressed: false,
     delta: [0, 0],
     mouse: [0, 0],
-    examples: [0, 1, 2, 3, 4, 5]
+    examples: [22, 31, 45, 3, 46, 71]
   },
   auth: {
     data: null,

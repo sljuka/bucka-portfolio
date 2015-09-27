@@ -6,13 +6,20 @@ import {Spring} from 'react-motion'
 const RANGE = [0, 1, 2, 3, 4, 5]
 const COUNT = RANGE.length
 const [WIDTH, HEIGHT, TOP, LEFT] = [300, 200, 0, 0]
-const LAYOUT = [0, 1, 2, 3, 4, 5].map(pos => {
-  const row = Math.floor(pos / 3)
-  const col = pos % 3
-  return [WIDTH * col, HEIGHT * row]
-})
 
 class Login extends Component {
+
+  _layout() {
+    const {examples} = this.props.processPanel.toJS()
+    let retVal = {}
+    for (let i = 0; i < examples.length; i++) {
+      const row = Math.floor(i / 3)
+      const col = i % 3
+      retVal[examples[i]] = [WIDTH * col, HEIGHT * row]
+    }
+    console.log(retVal)
+    return retVal
+  }
 
   handleTouchMove(e) {
     e.preventDefault()
@@ -54,16 +61,15 @@ class Login extends Component {
 
   getValues() {
     const {examples, isPressed, mouse, pressedKey} = this.props.processPanel.toJS()
-    console.log(examples)
+    const layout = this._layout()
     return {
-      order: examples.map((_, key) => {
+      order: examples.map((key) => {
         if (key === pressedKey && isPressed)
           return {val: mouse, config: []}
-        const visPos = examples.indexOf(key)
-        return {val: LAYOUT[visPos], config: [120, 17]}
+        return {val: layout[key], config: [120, 17]}
       }),
       scales: {
-        val: examples.map((el, key) => (key === pressedKey && isPressed) ? 1.2 : 1),
+        val: examples.map((key) => (key === pressedKey && isPressed) ? 1.2 : 1),
         config: [180, 10]
       }
     }
@@ -80,20 +86,20 @@ class Login extends Component {
             onMouseUp={this.handleMouseUp.bind(this)}
             onTouchEnd={this.handleMouseUp.bind(this)}
             onTouchMove={this.handleTouchMove.bind(this)}>
-            {currOrder.map(({val: [x, y]}, key) =>
+            {currOrder.map(({val: [x, y]}, index) =>
               <div
                 className="example-block"
-                data-key={key}
-                key={key}
-                onMouseDown={this.handleMouseDown.bind(null, key, [x, y])}
-                onTouchStart={this.handleTouchStart.bind(null, key, [x, y])}
+                data-key={examples[index]}
+                key={examples[index]}
+                onMouseDown={this.handleMouseDown.bind(null, examples[index], [x, y])}
+                onTouchStart={this.handleTouchStart.bind(null, examples[index], [x, y])}
                 style={{
                         backgroundColor: '#EF767A',
-                        transform: `translate3d(${x + LEFT}px, ${y + TOP}px, 0) scale(${scales[key]})`,
-                        WebkitTransform: `translate3d(${x + LEFT}px, ${y + TOP}px, 0) scale(${scales[key]})`,
-                        zIndex: key === pressedKey ? 99 : 1
+                        transform: `translate3d(${x + LEFT}px, ${y + TOP}px, 0) scale(${scales[examples[index]]})`,
+                        WebkitTransform: `translate3d(${x + LEFT}px, ${y + TOP}px, 0) scale(${scales[examples[index]]})`,
+                        zIndex: examples[index] === pressedKey ? 99 : 1
                       }}
-              >{key}
+              >{examples[index]}
               </div>
             )}
           </div>
