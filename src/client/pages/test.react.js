@@ -1,36 +1,50 @@
 import Component from '../components/component.react'
 import React from 'react'
 import {startDraggingBubble, moveBubble, letGoBubble} from '../processPanel/actions'
-import {Spring} from 'react-motion'
+import {Motion, spring} from 'react-motion'
 
 const RANGE = [0, 1, 2, 3, 4, 5]
 const COUNT = RANGE.length
-const [WIDTH, HEIGHT, TOP, LEFT] = [300, 200, 0, 0]
+const [WIDTH, HEIGHT] = [600, 450]
+const LAYOUT = RANGE.map(pos => {
+  const row = Math.floor(pos / 3)
+  const col = pos % 3
+  return [WIDTH * col, HEIGHT * row]
+})
 
 class Login extends Component {
 
-  _layout() {
-    const {examples} = this.props.processPanel.toJS()
-    let retVal = {}
-    for (let i = 0; i < examples.length; i++) {
-      const row = Math.floor(i / 3)
-      const col = i % 3
-      retVal[examples[i]] = [WIDTH * col, HEIGHT * row]
-    }
-    console.log(retVal)
-    return retVal
+  componentDidMount() {
+    window.addEventListener('touchmove', this.handleTouchMove.bind(this))
+    window.addEventListener('touchend', this.handleMouseUp.bind(this))
+    window.addEventListener('mousemove', this.handleMouseMove.bind(this))
+    window.addEventListener('mouseup', this.handleMouseUp.bind(this))
+  }
+
+  componentWillUnmount() {
+    window.removeEventListener(this.handleTouchMove.bind(this))
+    window.removeEventListener(this.handleMouseUp.bind(this))
+    window.removeEventListener(this.handleMouseMove.bind(this))
+    window.removeEventListener(this.handleMouseUp.bind(this))
   }
 
   handleTouchMove(e) {
     e.preventDefault()
-    this.handleMouseMove(e.touches[0])
+    e.stopPropagation()
+    this.handleMoveBubble(e.touches[0])
+  }
+
+  handleMouseMove(e) {
+    e.preventDefault()
+    e.stopPropagation()
+    this.handleMoveBubble({pageX: e.pageX, pageY: e.pageY})
   }
 
   handleMouseUp() {
     letGoBubble()
   }
 
-  handleMouseMove({pageX, pageY}) {
+  handleMoveBubble({pageX, pageY}, e) {
     const {examples, pressedKey, isPressed, delta: [dx, dy]} = this.props.processPanel.toJS()
     if (isPressed) {
       const mouse = [pageX - dx, pageY - dy]
@@ -59,52 +73,54 @@ class Login extends Component {
     })
   }
 
-  getValues() {
-    const {examples, isPressed, mouse, pressedKey} = this.props.processPanel.toJS()
-    const layout = this._layout()
-    return {
-      order: examples.map((key) => {
-        if (key === pressedKey && isPressed)
-          return {val: mouse, config: []}
-        return {val: layout[key], config: [120, 17]}
-      }),
-      scales: {
-        val: examples.map((key) => (key === pressedKey && isPressed) ? 1.2 : 1),
-        config: [180, 10]
-      }
-    }
-  }
-
   render() {
-    const {examples, pressedKey} = this.props.processPanel.toJS()
+    const {examples, pressedKey, isPressed, mouse} = this.props.processPanel.toJS()
     return (
-      <Spring endValue={this.getValues()}>
-        {({order: currOrder, scales: {val: scales}}) =>
-          <div
-            className='canvas'
-            onMouseMove={this.handleMouseMove.bind(this)}
-            onMouseUp={this.handleMouseUp.bind(this)}
-            onTouchEnd={this.handleMouseUp.bind(this)}
-            onTouchMove={this.handleTouchMove.bind(this)}>
-            {currOrder.map(({val: [x, y]}, index) =>
-              <div
-                className="example-block"
-                data-key={examples[index]}
-                key={examples[index]}
-                onMouseDown={this.handleMouseDown.bind(null, examples[index], [x, y])}
-                onTouchStart={this.handleTouchStart.bind(null, examples[index], [x, y])}
-                style={{
-                        backgroundColor: '#EF767A',
-                        transform: `translate3d(${x + LEFT}px, ${y + TOP}px, 0) scale(${scales[examples[index]]})`,
-                        WebkitTransform: `translate3d(${x + LEFT}px, ${y + TOP}px, 0) scale(${scales[examples[index]]})`,
-                        zIndex: examples[index] === pressedKey ? 99 : 1
-                      }}
-              >{examples[index]}
-              </div>
-            )}
-          </div>
-        }
-      </Spring>
+      <div className="demo2">
+        {examples.map((key, index) => {
+          let style
+          let x
+          let y
+          const visualPosition = index
+          if (key === pressedKey && isPressed) {
+            [x, y] = mouse
+            style = {
+              translateX: x,
+              translateY: y,
+              scale: spring(1.2, [180, 10]),
+              boxShadow: spring((x - (3 * WIDTH - 50) / 2) / 15, [180, 10]) + 5
+            }
+          } else {
+            [x, y] = LAYOUT[visualPosition]
+            style = {
+              translateX: spring(x, [120, 17]),
+              translateY: spring(y, [120, 17]),
+              scale: spring(1, [180, 10]),
+              boxShadow: '0'
+            }
+          }
+          return (
+            <Motion key={key} style={style}>
+              {({translateX, translateY, scale, boxShadow}) =>
+                <div
+                  className="example-block"
+                  onMouseDown={this.handleMouseDown.bind(null, key, [x, y])}
+                  onTouchStart={this.handleTouchStart.bind(null, key, [x, y])}
+                  style={{
+                    backgroundColor: '#49BEAA',
+                    WebkitTransform: `translate3d(${translateX}px, ${translateY}px, 0) scale(${scale})`,
+                    transform: `translate3d(${translateX}px, ${translateY}px, 0) scale(${scale})`,
+                    zIndex: key === pressedKey ? 99 : visualPosition,
+                    boxShadow: `${boxShadow}px 5px 5px rgba(0,0,0,0.5)`
+                  }}
+                >
+                  {key}
+                </div>
+              }
+            </Motion>
+          )
+        })}
+      </div>
     )
   }
 
