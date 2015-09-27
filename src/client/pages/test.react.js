@@ -1,5 +1,5 @@
 import Component from '../components/component.react'
-import React from 'react'
+import React, {PropTypes as RPT} from 'react'
 import {startDraggingBubble, moveBubble, letGoBubble} from '../processPanel/actions'
 import {Motion, spring} from 'react-motion'
 
@@ -12,7 +12,11 @@ const LAYOUT = RANGE.map(pos => {
   return [WIDTH * col, HEIGHT * row]
 })
 
-class Login extends Component {
+export default class Test extends Component {
+
+  static propTypes = {
+    processPanel: RPT.object.isRequired
+  }
 
   componentDidMount() {
     window.addEventListener('touchmove', this.handleTouchMove.bind(this))
@@ -44,12 +48,12 @@ class Login extends Component {
     letGoBubble()
   }
 
-  handleMoveBubble({pageX, pageY}, e) {
+  handleMoveBubble({pageX, pageY}) {
     const {examples, pressedKey, isPressed, delta: [dx, dy]} = this.props.processPanel.toJS()
     if (isPressed) {
       const mouse = [pageX - dx, pageY - dy]
-      const col = this._clamp(Math.floor(mouse[0] / WIDTH), 0, 2)
-      const row = this._clamp(Math.floor(mouse[1] / HEIGHT), 0, Math.floor(COUNT / 3))
+      const col = this._clamp(Math.floor((mouse[0] + 40) / WIDTH), 0, 2)
+      const row = this._clamp(Math.floor((mouse[1] + 40) / HEIGHT), 0, Math.floor(COUNT / 3))
       const newIndex = row * 3 + col
       const newOrder = this._reinsert(examples, examples.indexOf(pressedKey), newIndex)
       moveBubble({
@@ -87,7 +91,7 @@ class Login extends Component {
             style = {
               translateX: x,
               translateY: y,
-              scale: spring(1.2, [180, 10]),
+              scale: spring(1.1, [180, 10]),
               boxShadow: spring((x - (3 * WIDTH - 50) / 2) / 15, [180, 10]) + 5
             }
           } else {
@@ -137,5 +141,3 @@ class Login extends Component {
   }
 
 }
-
-export default Login
