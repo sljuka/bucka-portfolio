@@ -1,8 +1,8 @@
-import Component from '../components/component.react';
-import DocumentTitle from 'react-document-title';
-import React from 'react';
-import {msg} from '../intl/store';
-import ProcessList from '../processPanel/processlist.react';
+import Component from '../components/component.react'
+import DocumentTitle from 'react-document-title'
+import React from 'react'
+import {msg} from '../intl/store'
+import ProcessList from '../processPanel/processlist.react'
 
 export default class Home extends Component {
 
@@ -13,6 +13,6 @@ export default class Home extends Component {
           <ProcessList processes={this.props.processes} />
         </div>
       </DocumentTitle>
-    );
+    )
   }
 }

@@ -1,28 +1,45 @@
 import Component from '../components/component.react'
-import React from 'react'
+import React, {PropTypes as RPT} from 'react'
 import {setBlocks} from '../menu/actions'
-import {TransitionSpring} from 'react-motion'
+import {TransitionMotion, spring} from 'react-motion'
 
 export default class Projects extends Component {
 
+  static propTypes = {
+    menu: RPT.object.isRequired
+  }
+
+  getDefaultValue() {
+    let blocks = this.props.menu.get('blocks').toJS()
+    return Object.keys(blocks)
+      .reduce((configs, key) => {
+        configs[key] = {
+          height: spring(0, [180, 12]),
+          opacity: spring(1, [180, 12]),
+          text: blocks[key] // interpolate the above 2 fields only
+        }
+        return configs
+      }, {})
+  }
+
   getEndValue() {
     let blocks = this.props.menu.get('blocks').toJS()
-    let configs = {}
-    Object.keys(blocks).forEach(key => {
-      configs[key] = {
-        height: {val: 50, config: [180, 12]},
-        opacity: {val: 1, config: [180, 12]},
-        text: blocks[key] // interpolate the above 2 fields only
-      }
-    })
-    return configs
+    return Object.keys(blocks)
+      .reduce((configs, key) => {
+        configs[key] = {
+          height: spring(50, [180, 12]),
+          opacity: spring(1, [180, 12]),
+          text: blocks[key] // interpolate the above 2 fields only
+        }
+        return configs
+      }, {})
   }
 
   willEnter(key) {
     let blocks = this.props.menu.get('blocks').toJS()
     return {
-      height: {val: 50},
-      opacity: {val: 1},
+      height: spring(0, [180, 12]),
+      opacity: spring(1, [180, 12]),
       text: blocks[key]
     }
   }
@@ -30,8 +47,8 @@ export default class Projects extends Component {
   willLeave(key, value, endValue, currentValue, currentSpeed) {
     // the key with this value is truly killed when the values reaches destination
     return {
-      height: {val: 0},
-      opacity: {val: 0},
+      height: spring(0),
+      opacity: spring(0),
       text: currentValue[key].text
     }
   }
@@ -44,26 +61,27 @@ export default class Projects extends Component {
 
   render() {
     return (
-      <TransitionSpring
-        endValue={this.getEndValue()}
+      <TransitionMotion
+        styles={this.getEndValue()}
         willEnter={this.willEnter}
-        willLeave={this.willLeave}>
-        {currentValue =>
+        willLeave={this.willLeave}
+      >
+        {configs =>
           <div>
-            {Object.keys(currentValue).map(key => {
+            {Object.keys(configs).map(key => {
               let style = {
-                height: currentValue[key].height.val,
-                opacity: currentValue[key].opacity.val
+                height: configs[key].height,
+                opacity: configs[key].opacity
               }
               return (
                 <div key={key} onClick={this.handleClick.bind(this, key)} style={style}>
-                  {currentValue[key].text}
+                  {configs[key].text}
                 </div>
               )
             })}
           </div>
         }
-      </TransitionSpring>
+      </TransitionMotion>
     )
   }
 
