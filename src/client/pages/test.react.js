@@ -3,19 +3,35 @@ import React, {PropTypes as RPT} from 'react'
 import {startDraggingBubble, moveBubble, letGoBubble} from '../processPanel/actions'
 import {Motion, spring} from 'react-motion'
 
-const RANGE = [0, 1, 2, 3, 4, 5]
-const COUNT = RANGE.length
 const [WIDTH, HEIGHT] = [600, 450]
-const LAYOUT = RANGE.map(pos => {
-  const row = Math.floor(pos / 3)
-  const col = pos % 3
-  return [WIDTH * col, HEIGHT * row]
-})
 
 export default class Test extends Component {
 
   static propTypes = {
-    processPanel: RPT.object.isRequired
+    processPanel: RPT.object.isRequired,
+    processes: RPT.object.isRequired
+  }
+
+  _count() {
+    return this.props.processes.size
+  }
+
+  _range() {
+    const processes = this.props.processes.toJS()
+    return Object.keys(processes)
+      .reduce((array, key) => {
+        array.push(processes[key])
+        return array
+      }, [])
+  }
+
+  _layout() {
+    return this._range()
+      .map((_, index) => {
+        const row = Math.floor(index / 3)
+        const col = index % 3
+        return [WIDTH * col, HEIGHT * row]
+      })
   }
 
   componentDidMount() {
@@ -53,7 +69,7 @@ export default class Test extends Component {
     if (isPressed) {
       const mouse = [pageX - dx, pageY - dy]
       const col = this._clamp(Math.floor((mouse[0] + 40) / WIDTH), 0, 2)
-      const row = this._clamp(Math.floor((mouse[1] + 40) / HEIGHT), 0, Math.floor(COUNT / 3))
+      const row = this._clamp(Math.floor((mouse[1] + 40) / HEIGHT), 0, Math.floor(this._count() / 3))
       const newIndex = row * 3 + col
       const newOrder = this._reinsert(examples, examples.indexOf(pressedKey), newIndex)
       moveBubble({
@@ -79,14 +95,15 @@ export default class Test extends Component {
 
   render() {
     const {examples, pressedKey, isPressed, mouse} = this.props.processPanel.toJS()
+    const layout = this._layout()
     return (
       <div className="demo2">
-        {examples.map((key, index) => {
+        {this._range().map((pcss, index) => {
           let style
           let x
           let y
           const visualPosition = index
-          if (key === pressedKey && isPressed) {
+          if (pcss.id === pressedKey && isPressed) {
             [x, y] = mouse
             style = {
               translateX: x,
@@ -95,7 +112,7 @@ export default class Test extends Component {
               boxShadow: spring((x - (3 * WIDTH - 50) / 2) / 15, [180, 10]) + 5
             }
           } else {
-            [x, y] = LAYOUT[visualPosition]
+            [x, y] = layout[visualPosition]
             style = {
               translateX: spring(x, [120, 17]),
               translateY: spring(y, [120, 17]),
@@ -104,21 +121,21 @@ export default class Test extends Component {
             }
           }
           return (
-            <Motion key={key} style={style}>
+            <Motion key={pcss.id} style={style}>
               {({translateX, translateY, scale, boxShadow}) =>
                 <div
                   className="example-block"
-                  onMouseDown={this.handleMouseDown.bind(null, key, [x, y])}
-                  onTouchStart={this.handleTouchStart.bind(null, key, [x, y])}
+                  onMouseDown={this.handleMouseDown.bind(null, pcss.id, [x, y])}
+                  onTouchStart={this.handleTouchStart.bind(null, pcss.id, [x, y])}
                   style={{
                     backgroundColor: '#49BEAA',
                     WebkitTransform: `translate3d(${translateX}px, ${translateY}px, 0) scale(${scale})`,
                     transform: `translate3d(${translateX}px, ${translateY}px, 0) scale(${scale})`,
-                    zIndex: key === pressedKey ? 99 : visualPosition,
+                    zIndex: pcss.id === pressedKey ? 99 : visualPosition,
                     boxShadow: `${boxShadow}px 5px 5px rgba(0,0,0,0.5)`
                   }}
                 >
-                  {key}
+                  {`${pcss.id} ${pcss.name}`}
                 </div>
               }
             </Motion>
