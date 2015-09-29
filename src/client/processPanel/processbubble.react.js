@@ -23,7 +23,8 @@ export default class ProcessBubble extends Component {
     const opened = pcss.opened
 
     return (
-      <div>
+      <div className='process-bubble'>
+        <h2>{pcss.name}</h2>
         <button onClick={() => this.handleCloseClick(pcss.name)}>Close</button>
         <Motion
           style={{animatedValue: spring((opened ? 100 : 1), [240, 30])}}

@@ -53,7 +53,6 @@ export const dispatchToken = register(({action, data}) => {
       processPanelCursor(processPanel => {
         return processPanel
           .set('isPressed', false)
-          .set('pressedKey', null)
           .set('delta', [0, 0])
 
       })

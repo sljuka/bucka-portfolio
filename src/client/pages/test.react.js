@@ -2,36 +2,15 @@ import Component from '../components/component.react'
 import React, {PropTypes as RPT} from 'react'
 import {startDraggingBubble, moveBubble, letGoBubble} from '../processPanel/actions'
 import {Motion, spring} from 'react-motion'
+import ProcessBubble from '../processPanel/processbubble.react'
 
-const [WIDTH, HEIGHT] = [600, 450]
+const [WIDTH, HEIGHT] = [600, 440]
 
 export default class Test extends Component {
 
   static propTypes = {
     processPanel: RPT.object.isRequired,
     processes: RPT.object.isRequired
-  }
-
-  _count() {
-    return this.props.processes.size
-  }
-
-  _range() {
-    const processes = this.props.processes.toJS()
-    return Object.keys(processes)
-      .reduce((array, key) => {
-        array.push(processes[key])
-        return array
-      }, [])
-  }
-
-  _layout() {
-    return this._range()
-      .map((_, index) => {
-        const row = Math.floor(index / 3)
-        const col = index % 3
-        return [WIDTH * col, HEIGHT * row]
-      })
   }
 
   componentDidMount() {
@@ -108,7 +87,7 @@ export default class Test extends Component {
             style = {
               translateX: x,
               translateY: y,
-              scale: spring(1.1, [180, 10]),
+              scale: spring(1.03, [180, 10]),
               boxShadow: spring((x - (3 * WIDTH - 50) / 2) / 15, [180, 10]) + 5
             }
           } else {
@@ -128,14 +107,13 @@ export default class Test extends Component {
                   onMouseDown={this.handleMouseDown.bind(null, pcss.id, [x, y])}
                   onTouchStart={this.handleTouchStart.bind(null, pcss.id, [x, y])}
                   style={{
-                    backgroundColor: '#49BEAA',
                     WebkitTransform: `translate3d(${translateX}px, ${translateY}px, 0) scale(${scale})`,
                     transform: `translate3d(${translateX}px, ${translateY}px, 0) scale(${scale})`,
                     zIndex: pcss.id === pressedKey ? 99 : visualPosition,
                     boxShadow: `${boxShadow}px 5px 5px rgba(0,0,0,0.5)`
                   }}
                 >
-                  {`${pcss.id} ${pcss.name}`}
+                  <ProcessBubble process={pcss} />
                 </div>
               }
             </Motion>
@@ -155,6 +133,28 @@ export default class Test extends Component {
 
   _clamp(n, min, max) {
     return Math.max(Math.min(n, max), min)
+  }
+
+  _count() {
+    return this.props.processes.size
+  }
+
+  _range() {
+    const processes = this.props.processes.toJS()
+    return Object.keys(processes)
+      .reduce((array, key) => {
+        array.push(processes[key])
+        return array
+      }, [])
+  }
+
+  _layout() {
+    return this._range()
+      .map((_, index) => {
+        const row = Math.floor(index / 3)
+        const col = index % 3
+        return [WIDTH * col, HEIGHT * row]
+      })
   }
 
 }
