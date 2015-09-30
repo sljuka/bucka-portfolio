@@ -73,7 +73,7 @@ export default class Test extends Component {
   }
 
   render() {
-    const {examples, pressedKey, isPressed, mouse} = this.props.processPanel.toJS()
+    const {pressedKey, isPressed, mouse} = this.props.processPanel.toJS()
     const layout = this._layout()
     return (
       <div className="demo2">
@@ -104,8 +104,6 @@ export default class Test extends Component {
               {({translateX, translateY, scale, boxShadow}) =>
                 <div
                   className="example-block"
-                  onMouseDown={this.handleMouseDown.bind(null, pcss.id, [x, y])}
-                  onTouchStart={this.handleTouchStart.bind(null, pcss.id, [x, y])}
                   style={{
                     WebkitTransform: `translate3d(${translateX}px, ${translateY}px, 0) scale(${scale})`,
                     transform: `translate3d(${translateX}px, ${translateY}px, 0) scale(${scale})`,
@@ -113,7 +111,11 @@ export default class Test extends Component {
                     boxShadow: `${boxShadow}px 5px 5px rgba(0,0,0,0.5)`
                   }}
                 >
-                  <ProcessBubble process={pcss} />
+                  <ProcessBubble
+                    mouseDownHeader={(e) => this.handleMouseDown(pcss.id, [x, y], e)}
+                    process={pcss}
+                    touchStartHeader={(e) => this.handleTouchStart(pcss.id, [x, y], e)}
+                  />
                 </div>
               }
             </Motion>

@@ -18,13 +18,26 @@ export default class ProcessBubble extends Component {
     close(processName)
   }
 
+  handleMouseDown(e) {
+    this.props.mouseDownHeader(e)
+  }
+
+  handleTouchStart(e) {
+    this.props.touchStartHeader(e)
+  }
+
   render() {
     const pcss = this.props.process
     const opened = pcss.opened
 
     return (
       <div className='process-bubble'>
-        <h2>{pcss.name}</h2>
+        <h2
+          onMouseDown={this.handleMouseDown.bind(this)}
+          onTouchStart={this.handleTouchStart.bind(this)}
+        >
+          {pcss.name}
+        </h2>
         <button onClick={() => this.handleCloseClick(pcss.name)}>Close</button>
         <Motion
           style={{animatedValue: spring((opened ? 100 : 1), [240, 30])}}
@@ -64,14 +77,14 @@ export default class ProcessBubble extends Component {
   defaultStyle() {
     return {
       width: '100%',
-      borderBottom: '1px solid',
+      borderBottom: '1px solid #bfccd1',
       height: config.bubbleItemHeight,
       overflow: 'hidden'
     }
   }
 
   openStyle(val) {
-    let bbottom = '1px solid'
+    let bbottom = '1px solid #bfccd1'
     const borderMargin = config.bubbleHeight - 4
     if (val >= borderMargin || val <= 1)
       bbottom = null
@@ -84,7 +97,7 @@ export default class ProcessBubble extends Component {
   }
 
   closeStyle(val) {
-    let bbottom = '1px solid'
+    let bbottom = '1px solid #bfccd1'
     const borderMargin = config.bubbleHeight - 4
     if (val >= borderMargin || val <= 1)
       bbottom = null
@@ -98,7 +111,7 @@ export default class ProcessBubble extends Component {
 
   listStyle() {
     return {
-      border: '1px solid',
+      border: '1px solid #bfccd1',
       padding: 0,
       height: config.bubbleHeight,
       overflowY: 'auto'
