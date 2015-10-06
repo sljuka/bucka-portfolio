@@ -85,18 +85,18 @@ export default class Test extends Component {
           if (pcss.id === pressedKey && isPressed) {
             [x, y] = mouse
             style = {
+              boxShadow: spring((x - (3 * WIDTH - 50) / 2) / 15, [180, 10]) + 5,
+              scale: spring(1.1, [180, 10]),
               translateX: x,
-              translateY: y,
-              scale: spring(1.03, [180, 10]),
-              boxShadow: spring((x - (3 * WIDTH - 50) / 2) / 15, [180, 10]) + 5
+              translateY: y
             }
           } else {
             [x, y] = layout[visualPosition]
             style = {
-              translateX: spring(x, [120, 17]),
-              translateY: spring(y, [120, 17]),
+              boxShadow: '0',
               scale: spring(1, [180, 10]),
-              boxShadow: '0'
+              translateX: spring(x, [120, 17]),
+              translateY: spring(y, [120, 17])
             }
           }
           return (

@@ -20,7 +20,8 @@ export default function userState() {
 function loadUserData(req) {
   const dataSources = [
     acceptLanguages(req),
-    loadProcesses()
+    loadProcesses(),
+    loadProcessNames()
   ];
 
   return Promise.settle(dataSources).then(receivedData =>
@@ -44,6 +45,14 @@ function acceptLanguages(req) {
 function loadProcesses() {
   return new Promise((resolve, reject) => {
     get('http://localhost:8000/api/v1/processes')
+      .then(response => resolve(response.json()))
+      .catch(ex => console.error(`GET is not working ${ex}`))
+  })
+}
+
+function loadProcessNames() {
+  return new Promise((resolve, reject) => {
+    get('http://localhost:8000/api/v1/processes/process_names')
       .then(response => resolve(response.json()))
       .catch(ex => console.error(`GET is not working ${ex}`))
   })

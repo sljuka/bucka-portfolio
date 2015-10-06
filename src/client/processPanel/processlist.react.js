@@ -1,6 +1,7 @@
 import Component from '../components/component.react'
 import React from 'react'
 import ProcessBubble from './processbubble.react'
+import ProcessSearch from '../processSearch/processSearch.react'
 
 export default class ProcessList extends Component {
 
@@ -10,6 +11,7 @@ export default class ProcessList extends Component {
 
     return (
       <div className='row'>
+        <ProcessSearch />
         {processKeys.map(processKey => {
           const pcss = processes[processKey]
 
