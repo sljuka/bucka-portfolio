@@ -3,9 +3,14 @@ import React, {PropTypes as RPT} from 'react'
 import {startDraggingBubble, moveBubble, letGoBubble} from '../processPanel/actions'
 import {Motion, spring} from 'react-motion'
 import ProcessBubble from '../processPanel/processbubble.react'
+import provideState from '../lib/provideState'
 
 const [WIDTH, HEIGHT] = [600, 440]
 
+@provideState({
+  processPanel: ['processPanel'],
+  processes: ['processes']
+})
 export default class Test extends Component {
 
   static propTypes = {
@@ -14,17 +19,17 @@ export default class Test extends Component {
   }
 
   componentDidMount() {
-    window.addEventListener('touchmove', this.handleTouchMove.bind(this))
-    window.addEventListener('touchend', this.handleMouseUp.bind(this))
-    window.addEventListener('mousemove', this.handleMouseMove.bind(this))
-    window.addEventListener('mouseup', this.handleMouseUp.bind(this))
+    document.addEventListener('touchmove', this.handleTouchMove.bind(this))
+    document.addEventListener('touchend', this.handleMouseUp.bind(this))
+    document.addEventListener('mousemove', this.handleMouseMove.bind(this))
+    document.addEventListener('mouseup', this.handleMouseUp.bind(this))
   }
 
   componentWillUnmount() {
-    window.removeEventListener(this.handleTouchMove.bind(this))
-    window.removeEventListener(this.handleMouseUp.bind(this))
-    window.removeEventListener(this.handleMouseMove.bind(this))
-    window.removeEventListener(this.handleMouseUp.bind(this))
+    document.removeEventListener('touchmove', this.handleTouchMove.bind(this))
+    document.removeEventListener('touchend', this.handleMouseUp.bind(this))
+    document.removeEventListener('mousemove', this.handleMouseMove.bind(this))
+    document.removeEventListener('mouseup', this.handleMouseUp.bind(this))
   }
 
   handleTouchMove(e) {
@@ -40,11 +45,13 @@ export default class Test extends Component {
   }
 
   handleMouseUp() {
-    letGoBubble()
+    const {isPressed} = this.props.processPanel
+    if (isPressed)
+      letGoBubble()
   }
 
   handleMoveBubble({pageX, pageY}) {
-    const {examples, pressedKey, isPressed, delta: [dx, dy]} = this.props.processPanel.toJS()
+    const {examples, pressedKey, isPressed, delta: [dx, dy]} = this.props.processPanel
     if (isPressed) {
       const mouse = [pageX - dx, pageY - dy]
       const col = this._clamp(Math.floor((mouse[0] + 40) / WIDTH), 0, 2)
@@ -73,7 +80,7 @@ export default class Test extends Component {
   }
 
   render() {
-    const {pressedKey, isPressed, mouse} = this.props.processPanel.toJS()
+    const {pressedKey, isPressed, mouse} = this.props.processPanel
     const layout = this._layout()
     return (
       <div className="demo2">
@@ -142,7 +149,7 @@ export default class Test extends Component {
   }
 
   _range() {
-    const processes = this.props.processes.toJS()
+    const processes = this.props.processes
     return Object.keys(processes)
       .reduce((array, key) => {
         array.push(processes[key])

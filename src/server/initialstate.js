@@ -2,6 +2,8 @@ import messages from '../client/messages'
 
 const initialLocale = 'en'
 
+/* eslint-disable camelcase */
+
 export default {
   // Each key represents one app feature/store.
   menu: {
@@ -15,6 +17,7 @@ export default {
       c: 'I am c'
     }
   },
+  processes: {},
   processPanel: {
     processes: {},
     pressedKey: null,
@@ -27,6 +30,7 @@ export default {
     data: null,
     form: null
   },
+  process_names: [],
   examples: {
     editable: {
       state: null,
@@ -57,3 +61,4 @@ export default {
     viewer: null
   }
 }
+/* eslint-enable */

@@ -6,7 +6,7 @@ import provideState from '../lib/provideState.js'
 export default class ProcessSearch extends Component {
 
   static propTypes = {
-    processNames: RPT.object.isRequired
+    processNames: RPT.array.isRequired
   }
 
   render() {

@@ -1,12 +1,20 @@
 import Component from '../components/component.react'
-import React from 'react'
+import React, {PropTypes as RPT} from 'react'
 import ProcessBubble from './processbubble.react'
 import ProcessSearch from '../processSearch/processSearch.react'
+import provideState from '../lib/provideState'
 
+@provideState({
+  processes: ['processes']
+})
 export default class ProcessList extends Component {
 
+  static propTypes = {
+    processes: RPT.object.isRequired
+  }
+
   render() {
-    const processes = this.props.processes.toJS()
+    const processes = this.props.processes
     const processKeys = Object.keys(processes)
 
     return (

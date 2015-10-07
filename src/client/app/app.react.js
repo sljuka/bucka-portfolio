@@ -17,33 +17,11 @@ import '../processPanel/store';
 
 class App extends Component {
 
-  constructor(props) {
-    super(props);
-    this.state = this.getState();
-  }
-
-  getState() {
-    const viewer = appState.get().getIn(['users', 'viewer']);
-    return appState.get().merge({
-      isLoggedIn: !!viewer,
-      viewer: viewer
-    }).toObject();
-  }
-
-  // Why componentWillMount instead of componentDidMount.
-  // https://github.com/este/este/issues/274
-  componentWillMount() {
-    if (!process.env.IS_BROWSER) return;
-    appState.on('change', () => {
-      measureRender(done => this.setState(this.getState(), done));
-    });
-  }
-
   render() {
     return (
       <div className="page container-fluid">
-        <Header menu={this.state.menu} />
-        <RouteHandler {...this.state} />
+        <Header />
+        <RouteHandler />
         <Footer />
       </div>
     );

@@ -2,15 +2,19 @@ import Component from '../components/component.react'
 import React, {PropTypes as RPT} from 'react'
 import {setBlocks} from '../menu/actions'
 import {TransitionMotion, spring} from 'react-motion'
+import provideState from '../lib/provideState'
 
+@provideState({
+  blocks: ['menu', 'blocks']
+})
 export default class Projects extends Component {
 
   static propTypes = {
-    menu: RPT.object.isRequired
+    blocks: RPT.object.isRequired
   }
 
   getDefaultValue() {
-    let blocks = this.props.menu.get('blocks').toJS()
+    let blocks = this.props.blocks
     return Object.keys(blocks)
       .reduce((configs, key) => {
         configs[key] = {
@@ -23,7 +27,7 @@ export default class Projects extends Component {
   }
 
   getEndValue() {
-    let blocks = this.props.menu.get('blocks').toJS()
+    let blocks = this.props.blocks
     return Object.keys(blocks)
       .reduce((configs, key) => {
         configs[key] = {
@@ -36,7 +40,7 @@ export default class Projects extends Component {
   }
 
   willEnter(key) {
-    let blocks = this.props.menu.get('blocks').toJS()
+    let blocks = this.props.blocks
     return {
       height: spring(0, [180, 12]),
       opacity: spring(1, [180, 12]),
@@ -54,8 +58,7 @@ export default class Projects extends Component {
   }
 
   handleClick(key) {
-    let {...newBlocks} = this.props.menu.get('blocks').toJS()
-    delete newBlocks[key]
+    let {...newBlocks} = this.props.blocks
     setBlocks(newBlocks)
   }
 

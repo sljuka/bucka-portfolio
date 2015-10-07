@@ -1,10 +1,18 @@
-import Component from '../components/component.react';
-import React from 'react';
+import Component from '../components/component.react'
+import React, {PropTypes as RPT} from 'react'
 import {Link} from 'react-router'
 import {msg} from '../intl/store'
 import {setMenuStyle, toggle} from '../menu/actions'
+import provideState from '../lib/provideState'
 
+@provideState({
+  menu: ['menu']
+})
 export default class Menu extends Component {
+
+  static propTypes = {
+    menu: RPT.object.isRequired
+  }
 
   toggleMenu(e) {
     e.preventDefault()
@@ -27,30 +35,33 @@ export default class Menu extends Component {
 
   render() {
 
-    const menuList =
+    const menuList = (
       <ul className="clearfix">
         <li><Link to="home">{msg('header.home')}</Link></li>
         <li><Link to="projects">{msg('header.projects')}</Link></li>
         <li><Link to="test">{msg('header.contact')}</Link></li>
-        <li><a href="#">Design</a></li>
-        <li><a href="#">Web 2.0</a></li>
-        <li><a href="#">Tools</a></li> 
-      </ul> 
+      </ul>
+    )
 
-    const expanded = this.props.menu.get('expanded')
-    const compact = this.props.menu.get('compact')
+    const expanded = this.props.menu.expended
+    const compact = this.props.menu.compact
     const displayMenuList = !compact || (compact && expanded)
 
     return (
       <nav className="main-nav clearfix">
         {compact &&
-          <a href="#" className="toggle-menu" onClick={this.toggleMenu}></a>
+          <a
+            className="toggle-menu"
+            href="#"
+            onClick={this.toggleMenu}
+          >
+          </a>
         }
         {displayMenuList &&
           menuList
         }
       </nav>
-    );
+    )
   }
 
 }

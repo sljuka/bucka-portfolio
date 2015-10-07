@@ -10,7 +10,7 @@ export default class Home extends Component {
     return (
       <DocumentTitle title={msg('home.title')}>
         <div className="home-page">
-          <ProcessList processes={this.props.processes} />
+          <ProcessList />
         </div>
       </DocumentTitle>
     )

@@ -1,6 +1,5 @@
 import Component from '../components/component.react'
 import React from 'react'
-import {msg} from '../intl/store'
 import Menu from '../menu/menu.react'
 
 class Header extends Component {
@@ -10,12 +9,12 @@ class Header extends Component {
     return (
       <header>
         <nav className="main-nav clearfix">
-          <Menu {...this.props} />
+          <Menu />
         </nav>
       </header>
-    );
+    )
   }
 
 }
 
-export default Header;
+export default Header
